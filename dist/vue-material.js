@@ -7852,7 +7852,10 @@ exports.default = {
       handler: function handler(val) {
         this.setFieldContent();
         this.MdSelect.modelValue = this.localValue;
-        this.emitSelected(val);
+
+        if (this.didMount) {
+          this.emitSelected(val);
+        }
       }
     },
     multiple: {
@@ -7993,7 +7996,7 @@ exports.default = {
       return this.localValue !== undefined && this.localValue !== null;
     },
     setLocalValueIfMultiple: function setLocalValueIfMultiple() {
-      if (isLocalValueSet()) {
+      if (this.isLocalValueSet()) {
         this.localValue = [this.localValue];
       } else {
         this.localValue = [];
@@ -11806,6 +11809,7 @@ exports.default = {
     },
     value: function value() {
       this.syncSelectedValue();
+      this.setWidth();
     }
   },
   methods: {
@@ -12447,7 +12451,7 @@ exports.default = {
     },
     addSelection: function addSelection() {
       if (!this.isMultipleSelected) {
-        this.MdTable.selectedItems.push(this.mdItem);
+        this.MdTable.selectedItems = this.MdTable.selectedItems.concat([this.mdItem]);
       }
     },
     removeSelection: function removeSelection() {
@@ -12480,7 +12484,7 @@ exports.default = {
         return false;
       }
 
-      this.MdTable.selectable.push(this.mdItem);
+      this.MdTable.selectable = this.MdTable.selectable.concat([this.mdItem]);
     },
     removeSelectableItem: function removeSelectableItem() {
       var target = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.mdItem;
