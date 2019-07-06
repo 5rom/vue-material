@@ -12608,10 +12608,6 @@ exports.default = {
     },
     mdSelectedValue: function mdSelectedValue() {
       this.syncSelectedValue();
-    },
-    value: function value() {
-      this.syncSelectedValue();
-      this.setWidth();
     }
   },
   methods: {
@@ -12695,16 +12691,11 @@ exports.default = {
       this.$emit('md-selected', val);
     },
     syncSelectedValue: function syncSelectedValue() {
-      var _this5 = this;
-
-      this.$nextTick().then(function () {
-        // render the table first
-        if (_this5.MdTable.selectingMode === 'single') {
-          _this5.MdTable.singleSelection = _this5.mdSelectedValue;
-        } else if (_this5.MdTable.selectingMode === 'multiple') {
-          _this5.MdTable.selectedItems = _this5.mdSelectedValue || [];
-        }
-      });
+      if (this.MdTable.selectingMode === 'single') {
+        this.MdTable.singleSelection = this.mdSelectedValue;
+      } else if (this.MdTable.selectingMode === 'multiple') {
+        this.MdTable.selectedItems = this.mdSelectedValue || [];
+      }
     },
     setWidth: function setWidth() {
       if (this.mdFixedHeader) {
@@ -12713,11 +12704,15 @@ exports.default = {
     }
   },
   created: function created() {
+    var _this5 = this;
+
     if (this.mdSort) {
       this.sortTable();
     }
 
-    this.syncSelectedValue();
+    this.$nextTick().then(function () {
+      _this5.syncSelectedValue();
+    });
   },
   mounted: function mounted() {
     this.setContentEl();
